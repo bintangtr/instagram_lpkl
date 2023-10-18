@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "982409964349",
+    "project_id": "instagram-lpkl-a5317",
+    "storage_bucket": "instagram-lpkl-a5317.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982409964349:android:5463be0c88e4787dd57354",
+        "android_client_info": {
+          "package_name": "com.example.instagram_lpkl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDutm3coykZ62i3Vv0mVTsvihdjln_zUqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

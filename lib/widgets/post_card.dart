@@ -5,6 +5,7 @@ import 'package:instagram_lpkl/providers/user_provider.dart';
 import 'package:instagram_lpkl/resources/firestore_methods.dart';
 import 'package:instagram_lpkl/screens/comments_screen.dart';
 import 'package:instagram_lpkl/utils/colors.dart';
+import 'package:instagram_lpkl/utils/global_variables.dart';
 import 'package:instagram_lpkl/utils/utils.dart';
 import 'package:instagram_lpkl/widgets/like_animation.dart';
 import 'package:instagram_lpkl/models/user.dart';
@@ -42,17 +43,21 @@ class _PostCardState extends State<PostCard> {
     } catch (e) {
       showSnackBar(e.toString(), context);
     }
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
+    final width = MediaQuery.of(context).size.width;
 
     return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color:  width > webScreenSize ? secondaryColor : mobileBackgroundColor,
+        ),
       color: mobileBackgroundColor,
+      ),
       padding: const EdgeInsets.symmetric(
         vertical: 10,
       ),
@@ -105,7 +110,11 @@ class _PostCardState extends State<PostCard> {
                           ]
                               .map(
                                 (e) => InkWell(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    FirestoreMethods()
+                                        .deletePost(widget.snap['postId']);
+                                    Navigator.of(context).pop();
+                                  },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 12,
@@ -178,11 +187,14 @@ class _PostCardState extends State<PostCard> {
                 isAnimating: widget.snap['likes'].contains(user.uid),
                 smallLike: true,
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
+                  onPressed: () async {
+                    await FirestoreMethods().likePost(
+                        widget.snap['postId'], user.uid, widget.snap['likes']);
+                  },
+                  icon: widget.snap['likes'].contains(user.uid) ? const Icon(
                     Icons.favorite,
                     color: Colors.red,
-                  ),
+                  ): const Icon(Icons.favorite_border,),
                 ),
               ),
               IconButton(

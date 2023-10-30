@@ -35,8 +35,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   //   });R
   // }
 
-  int _page = 0;
   //  model.User user = Provider.of<UserProvider>(context).getUser;
+  int _page = 0;
   late PageController pageController;
 
   @override
@@ -51,14 +51,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     pageController.dispose();
   }
 
-  void navigationTapped(int page) {
-    pageController.jumpToPage(page);
-  }
-
   void onPageChanged(int page) {
     setState(() {
       _page = page;
     });
+  }
+  
+  void navigationTapped(int page) {
+    pageController.jumpToPage(page);
   }
 
   @override

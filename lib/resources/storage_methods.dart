@@ -9,7 +9,7 @@ class StorageMethods {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // adding image to firebase storage
+  // Upload image to firebase storage
   Future<String> uploadImageToStorage(String childname, Uint8List file, bool isPost) async {
 
     Reference ref = _storage.ref().child(childname).child(_auth.currentUser!.uid);
@@ -20,6 +20,22 @@ class StorageMethods {
     }
 
     UploadTask uploadTask = ref.putData(file);
+
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  // Update profile image in firebase storage
+  Future<String> updateProfileImage(String childname, Uint8List file, bool isPost) async {
+    Reference ref = _storage.ref().child(childname).child(_auth.currentUser!.uid);
+
+    UploadTask uploadTask = ref.putData(file);
+
+    if (isPost) {
+      String id = const Uuid().v1();
+      ref = ref.child(id);
+    }
 
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();

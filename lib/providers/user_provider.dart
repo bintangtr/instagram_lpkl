@@ -14,3 +14,30 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
+// if (res != 'success') {
+//       showSnackBar(res, context);
+//     } else {
+//       Navigator.of(context).pop();
+//     }
+
+// Container(
+//                     child: isLoading
+//                         ? Center(
+//                             child: CircularProgressIndicator(
+//                               color: primaryColor,
+//                             ),
+//                           )
+//                         : const Text("Save"),
+//                     width: double.infinity,
+//                     alignment: Alignment.center,
+//                     padding: const EdgeInsets.symmetric(vertical: 12),
+//                     decoration: const ShapeDecoration(
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.all(
+//                           Radius.circular(4),
+//                         ),
+//                       ),
+//                       color: blueColor,
+//                     ),
+//                   ),

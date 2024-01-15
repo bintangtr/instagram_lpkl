@@ -66,7 +66,7 @@ class _PostCardState extends State<PostCard> {
           Container(
             padding: const EdgeInsets.symmetric(
               vertical: 4,
-              horizontal: 16,
+              horizontal: 8,
             ).copyWith(right: 0),
             child: Row(
               children: [
@@ -151,7 +151,7 @@ class _PostCardState extends State<PostCard> {
               alignment: Alignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.35,
+                  height: MediaQuery.of(context).size.height * 0.50,
                   width: double.infinity,
                   child: Image.network(
                     widget.snap['postUrl'],

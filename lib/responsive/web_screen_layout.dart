@@ -82,7 +82,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
           ),
           IconButton(
             icon: Icon(
-              Icons.messenger_outline,
+              Icons.person,
               color: _page == 4? primaryColor: secondaryColor,
             ),
             onPressed: () => navigationTapped(4),

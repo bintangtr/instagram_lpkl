@@ -47,19 +47,43 @@ class FirestoreMethods {
   // Update Profile
 Future<void> updateProfile(
   String uid,
-  String newProfileImage,  // Gambar profil yang baru
+  String newProfileImage,
   String newUsername,
   String newBio,
 ) async {
   try {
     // Update profile image if provided
     if (newProfileImage.isNotEmpty) {
+      // Update koleksi "users"
       await _firestore.collection('users').doc(uid).update({
         'photoUrl': newProfileImage,
       });
+
+      // Update koleksi "posts"
+      QuerySnapshot postDocs = await _firestore
+          .collection('posts')
+          .where('uid', isEqualTo: uid)
+          .get();
+
+      for (QueryDocumentSnapshot postDoc in postDocs.docs) {
+        await postDoc.reference.update({
+          'profImage': newProfileImage,
+        });
+      }
     }
 
-    // Update username and bio
+    // Update username dan bio di koleksi "users"
+    QuerySnapshot postDocs = await _firestore
+          .collection('posts')
+          .where('uid', isEqualTo: uid)
+          .get();
+
+    for (QueryDocumentSnapshot postDoc in postDocs.docs) {
+        await postDoc.reference.update({
+          'username': newUsername,
+        });
+      }
+
     await _firestore.collection('users').doc(uid).update({
       'username': newUsername,
       'bio': newBio,

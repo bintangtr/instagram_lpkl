@@ -77,42 +77,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Text(
                     userData['username'],
-                  ),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ), 
+                  Spacer(),
                   IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                          ),
-                          shrinkWrap: true,
-                          children: [
-                            'Edit Profile',
-                          ]
-                              .map(
-                                (e) => InkWell(
-                                  onTap: () async {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid,)));
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 16,
-                                    ),
-                                    child: Text(e),
+                    onPressed: isLoading
+                        ? null // Jangan izinkan klik saat isLoading
+                        : () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                child: ListView(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
                                   ),
+                                  shrinkWrap: true,
+                                  children: [
+                                    'Edit Profile',
+                                  ]
+                                      .map(
+                                        (e) => InkWell(
+                                          onTap: () async {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditProfileScreen(
+                                                          uid: FirebaseAuth
+                                                              .instance
+                                                              .currentUser!
+                                                              .uid,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 12,
+                                              horizontal: 16,
+                                            ),
+                                            child: Text(e),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
                                 ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.more_vert),
-                ),
+                              ),
+                            );
+                          },
+                    icon: const Icon(Icons.more_vert),
+                  ),
                 ],
               ),
               centerTitle: false,

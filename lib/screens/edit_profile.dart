@@ -59,33 +59,34 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   saveProfileChanges() async {
-  setState(() {
-    isLoading = true;
-  });
+    setState(() {
+      isLoading = true;
+    });
 
-  String newProfileImageUrl = '';
-  if (newProfilePhotoUrl != null) {
-    newProfileImageUrl = await StorageMethods().updateProfileImage('profilPics', newProfilePhotoUrl!, true );
-  }
+    String newProfileImageUrl = '';
+    if (newProfilePhotoUrl != null) {
+      newProfileImageUrl = await StorageMethods()
+          .updateProfileImage('profilePics', newProfilePhotoUrl!, true);
+    }
 
-  // Update profile image, username, and bio
-  await FirestoreMethods().updateProfile(
-    widget.uid,
-    newProfileImageUrl,
-    usernameController.text,
-    bioController.text,
-  );
+    // Update profile image, username, and bio
+    await FirestoreMethods().updateProfile(
+      widget.uid,
+      newProfileImageUrl,
+      usernameController.text,
+      bioController.text,
+    );
 
-  setState(() {
-    isLoading = false;
-  });
+    setState(() {
+      isLoading = false;
+    });
 
-  // Navigate back to the profile page
-  Navigator.of(context).pop(
-    MaterialPageRoute(
-      builder: (context) => ProfileScreen(uid: widget.uid),
-    ),
-  );
+    // Navigate back to the profile page
+    Navigator.of(context).pop(
+      MaterialPageRoute(
+        builder: (context) => ProfileScreen(uid: widget.uid),
+      ),
+    );
   }
 
   @override
@@ -96,88 +97,101 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         title: Text('Edit Profile'),
         centerTitle: false,
       ),
-      body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
+      body: ListView(
               children: [
-                Stack(
-                  children: [
-                    newProfilePhotoUrl != null
-                        ? CircleAvatar(
-                            radius: 80,
-                            backgroundImage: MemoryImage(newProfilePhotoUrl!),
-                          )
-                        : CircleAvatar(
-                            radius: 80,
-                            backgroundImage: NetworkImage(
-                              userData['photoUrl'],
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          newProfilePhotoUrl != null
+                              ? CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage:
+                                      MemoryImage(newProfilePhotoUrl!),
+                                )
+                              : CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage: NetworkImage(
+                                    userData['photoUrl'],
+                                  ),
+                                ),
+                          Positioned(
+                            bottom: -10,
+                            left: 110,
+                            child: IconButton(
+                              onPressed: selectImage,
+                              icon: const Icon(
+                                Icons.add_a_photo,
+                              ),
                             ),
                           ),
-                    Positioned(
-                      bottom: -10,
-                      left: 80,
-                      child: IconButton(
-                        onPressed: selectImage,
-                        icon: const Icon(
-                          Icons.add_a_photo,
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                // Textfield untuk username
-                TextFormField(
-                  controller: usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'Username',
-                  ),
-                ),
-                SizedBox(height: 10),
+                      SizedBox(height: 20),
+                      // Textfield untuk username
+                      TextFormField(
+                        controller: usernameController,
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                        ),
+                        keyboardType: TextInputType
+                            .text, // Ini memaksa keyboard menjadi keyboard teks
+                        onChanged: (text) {
+                          // Menghapus spasi dan mengubah teks menjadi huruf kecil
+                          final formattedText =
+                              text.replaceAll(RegExp(r' '), '').toLowerCase();
 
-                // Textfield untuk bio
-                TextFormField(
-                  controller: bioController,
-                  decoration: InputDecoration(
-                    labelText: 'Bio',
-                  ),
-                ),
-                SizedBox(height: 20),
-
-                InkWell(
-                  onTap: saveProfileChanges,
-                  child: Container(
-                    child: isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: primaryColor,
+                          usernameController.value =
+                              usernameController.value.copyWith(
+                            text: formattedText,
+                            selection: TextSelection.fromPosition(
+                              TextPosition(offset: formattedText.length),
                             ),
-                          )
-                        : const Text("Save"),
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
+                          );
+                        },
+                      ),
+
+                      SizedBox(height: 10),
+
+                      // Textfield untuk bio
+                      TextFormField(
+                        controller: bioController,
+                        decoration: InputDecoration(
+                          labelText: 'Bio',
                         ),
                       ),
-                      color: blueColor,
-                    ),
+                      SizedBox(height: 20),
+
+                      InkWell(
+                        onTap: saveProfileChanges,
+                        child: Container(
+                          child: isLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: primaryColor,
+                                  ),
+                                )
+                              : const Text("Save"),
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: const ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4),
+                              ),
+                            ),
+                            color: blueColor,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

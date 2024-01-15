@@ -121,6 +121,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         ? Center(
             child: IconButton(
               icon: const Icon(Icons.upload),
+              iconSize:40,
               onPressed: () => _selectImage(context),
             ),
           )
@@ -188,7 +189,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: MemoryImage(_file!),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                               alignment: FractionalOffset.topCenter,
                             ),
                           ),
